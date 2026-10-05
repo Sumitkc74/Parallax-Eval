@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../theme/app_theme.dart';
 import '../widgets/formatted_markdown_view.dart';
 import '../widgets/skeleton_loader.dart';
 
@@ -82,16 +83,16 @@ class _LegalComplianceScreenState extends State<LegalComplianceScreen> with Sing
   Widget build(BuildContext context) {
     return Title(
       title: 'Parallax-Eval | Governance, Legal & Compliance',
-      color: const Color(0xFF1A283B),
+      color: AppThemeColors.primarySlate(context),
       child: Scaffold(
         appBar: AppBar(
         title: const Text('Governance, Legal and Compliance Hub'),
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
-          indicatorColor: const Color(0xFF1A283B),
-          labelColor: const Color(0xFF1A283B),
-          unselectedLabelColor: const Color(0xFF5A6675),
+          indicatorColor: Theme.of(context).brightness == Brightness.dark ? const Color(0xFF60A5FA) : const Color(0xFF1A283B),
+          labelColor: Theme.of(context).brightness == Brightness.dark ? const Color(0xFF60A5FA) : const Color(0xFF1A283B),
+          unselectedLabelColor: AppThemeColors.textMuted(context),
           labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
           unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal, fontSize: 13),
           tabs: const [
@@ -123,16 +124,16 @@ class _LegalComplianceScreenState extends State<LegalComplianceScreen> with Sing
                     child: Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppThemeColors.cardBg(context),
                         borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: const Color(0xFFE2E4E8)),
+                        border: Border.all(color: AppThemeColors.border(context)),
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text('Documentation Load Error', style: TextStyle(fontFamily: 'Georgia', fontSize: 16, fontWeight: FontWeight.bold)),
+                          Text('Documentation Load Error', style: TextStyle(fontFamily: 'Georgia', fontSize: 16, fontWeight: FontWeight.bold, color: AppThemeColors.textPrimary(context))),
                           const SizedBox(height: 8),
-                          Text('Could not load documentation: $_error', textAlign: TextAlign.center, style: const TextStyle(fontSize: 12, color: Color(0xFF5A6675))),
+                          Text('Could not load documentation: $_error', textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: AppThemeColors.textMuted(context))),
                           const SizedBox(height: 14),
                           ElevatedButton(onPressed: _loadData, child: const Text('Retry')),
                         ],
@@ -167,9 +168,9 @@ class _LegalComplianceScreenState extends State<LegalComplianceScreen> with Sing
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppThemeColors.cardBg(context),
               borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: const Color(0xFFE2E4E8)),
+              border: Border.all(color: AppThemeColors.border(context)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,23 +180,23 @@ class _LegalComplianceScreenState extends State<LegalComplianceScreen> with Sing
                   children: [
                     Text(
                       summary['platform_name'] ?? 'Parallax-Eval',
-                      style: const TextStyle(fontFamily: 'Georgia', fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF1A283B)),
+                      style: TextStyle(fontFamily: 'Georgia', fontWeight: FontWeight.bold, fontSize: 16, color: AppThemeColors.textPrimary(context)),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFEDF4F0),
+                        color: Theme.of(context).brightness == Brightness.dark ? const Color(0xFF183324) : const Color(0xFFEDF4F0),
                         borderRadius: BorderRadius.circular(3),
-                        border: Border.all(color: const Color(0xFFCFE2D7)),
+                        border: Border.all(color: Theme.of(context).brightness == Brightness.dark ? const Color(0xFF2F855A) : const Color(0xFFCFE2D7)),
                       ),
-                      child: const Text('Audited Open Source', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF245E43))),
+                      child: Text('Audited Open Source', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Theme.of(context).brightness == Brightness.dark ? const Color(0xFF68D391) : const Color(0xFF245E43))),
                     ),
                   ],
                 ),
                 const SizedBox(height: 4),
                 Text(
                   'License: ${summary['license'] ?? 'Apache 2.0'} | Version: ${summary['version'] ?? '1.0.0'}',
-                  style: const TextStyle(color: Color(0xFF5A6675), fontSize: 12),
+                  style: TextStyle(color: AppThemeColors.textMuted(context), fontSize: 12),
                 ),
                 const Divider(),
                 _buildMetaRow('Age Restriction', summary['age_restriction'] ?? '18+'),
@@ -216,27 +217,27 @@ class _LegalComplianceScreenState extends State<LegalComplianceScreen> with Sing
           const SizedBox(height: 16),
 
           // 2. Compliance Standards Table
-          const Text(
+          Text(
             'Audited Compliance Frameworks',
-            style: TextStyle(fontFamily: 'Georgia', fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFF1A283B)),
+            style: TextStyle(fontFamily: 'Georgia', fontWeight: FontWeight.bold, fontSize: 15, color: AppThemeColors.textPrimary(context)),
           ),
           const SizedBox(height: 8),
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppThemeColors.cardBg(context),
               borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: const Color(0xFFE2E4E8)),
+              border: Border.all(color: AppThemeColors.border(context)),
             ),
             child: Table(
               border: TableBorder(
-                horizontalInside: BorderSide(color: Colors.grey.shade200, width: 0.8),
+                horizontalInside: BorderSide(color: AppThemeColors.border(context), width: 0.8),
               ),
               children: standards.map((s) {
                 return TableRow(
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                      child: Text(s.toString(), style: const TextStyle(fontSize: 12, height: 1.4)),
+                      child: Text(s.toString(), style: TextStyle(fontSize: 12, height: 1.4, color: AppThemeColors.textPrimary(context))),
                     ),
                   ],
                 );
@@ -249,21 +250,21 @@ class _LegalComplianceScreenState extends State<LegalComplianceScreen> with Sing
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppThemeColors.cardBg(context),
               borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: const Color(0xFFE2E4E8)),
+              border: Border.all(color: AppThemeColors.border(context)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Data Subject Rights',
-                  style: TextStyle(fontFamily: 'Georgia', fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF1A283B)),
+                  style: TextStyle(fontFamily: 'Georgia', fontWeight: FontWeight.bold, fontSize: 14, color: AppThemeColors.textPrimary(context)),
                 ),
                 const SizedBox(height: 6),
-                const Text(
+                Text(
                   'In accordance with Articles 16 & 17 of GDPR and Section 8 of the Nepal Privacy Act 2075:',
-                  style: TextStyle(fontSize: 12, color: Color(0xFF5A6675)),
+                  style: TextStyle(fontSize: 12, color: AppThemeColors.textMuted(context)),
                 ),
                 const SizedBox(height: 10),
                 if (_consentInfo != null && _consentInfo!['data_subject_rights'] != null)
@@ -302,6 +303,7 @@ class _LegalComplianceScreenState extends State<LegalComplianceScreen> with Sing
 
   Widget _buildDisclaimersTab() {
     final disclaimers = (_legalSummary?['disclaimers'] as List<dynamic>?) ?? [];
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return ListView(
       padding: const EdgeInsets.all(16),
@@ -309,21 +311,26 @@ class _LegalComplianceScreenState extends State<LegalComplianceScreen> with Sing
         Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: const Color(0xFFF7F2E8),
+            color: isDark ? const Color(0xFF2C2416) : const Color(0xFFF7F2E8),
             borderRadius: BorderRadius.circular(6),
-            border: Border.all(color: const Color(0xFFE6D9C5)),
+            border: Border.all(color: isDark ? const Color(0xFF5A4422) : const Color(0xFFE6D9C5)),
           ),
-          child: const Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Scientific and Research Disclaimers',
-                style: TextStyle(fontFamily: 'Georgia', fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF7D5518)),
+                style: TextStyle(
+                  fontFamily: 'Georgia',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                  color: isDark ? const Color(0xFFFBD38D) : const Color(0xFF7D5518),
+                ),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Text(
                 'Parallax-Eval is designed solely for empirical safety benchmarking and alignment auditing. Model outputs must not be operationalized for harmful actions.',
-                style: TextStyle(fontSize: 12, color: Color(0xFF1E242B), height: 1.35),
+                style: TextStyle(fontSize: 12, color: AppThemeColors.textPrimary(context), height: 1.35),
               ),
             ],
           ),
@@ -338,21 +345,21 @@ class _LegalComplianceScreenState extends State<LegalComplianceScreen> with Sing
             margin: const EdgeInsets.only(bottom: 10),
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppThemeColors.cardBg(context),
               borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: const Color(0xFFE2E4E8)),
+              border: Border.all(color: AppThemeColors.border(context)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 FormattedInlineText(
                   text: title,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF1A283B)),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppThemeColors.textPrimary(context)),
                 ),
                 const SizedBox(height: 4),
                 FormattedInlineText(
                   text: body.isNotEmpty ? body : d.toString(),
-                  style: const TextStyle(fontSize: 12, color: Color(0xFF5A6675), height: 1.4),
+                  style: TextStyle(fontSize: 12, color: AppThemeColors.textMuted(context), height: 1.4),
                 ),
               ],
             ),
@@ -380,10 +387,10 @@ class _LegalComplianceScreenState extends State<LegalComplianceScreen> with Sing
       children: [
         SizedBox(
           width: 140,
-          child: Text('$title:', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12, color: Color(0xFF1A283B))),
+          child: Text('$title:', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12, color: AppThemeColors.textPrimary(context))),
         ),
         Expanded(
-          child: Text(value, style: const TextStyle(fontSize: 12, color: Color(0xFF5A6675))),
+          child: Text(value, style: TextStyle(fontSize: 12, color: AppThemeColors.textMuted(context))),
         ),
       ],
     );

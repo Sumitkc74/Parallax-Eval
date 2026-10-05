@@ -678,9 +678,12 @@ class _PromptInspectorScreenState extends State<PromptInspectorScreen> {
         // Overall Verdict Card
         Card(
           elevation: 0,
-          color: isSafe ? const Color(0xFFEAF5EA) : const Color(0xFFFBF1F1),
+          color: isSafe ? AppThemeColors.successBg(context) : AppThemeColors.errorBg(context),
           shape: RoundedRectangleBorder(
-            side: BorderSide(color: isSafe ? const Color(0xFFA7D7A9) : const Color(0xFFE8C8C8), width: 1.5),
+            side: BorderSide(
+              color: isSafe ? AppThemeColors.successBorder(context) : AppThemeColors.errorBorder(context),
+              width: 1.5,
+            ),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Padding(
@@ -806,7 +809,7 @@ class _PromptInspectorScreenState extends State<PromptInspectorScreen> {
         Card(
           elevation: 0,
           shape: RoundedRectangleBorder(
-            side: const BorderSide(color: Color(0xFFE2E4E8)),
+            side: BorderSide(color: AppThemeColors.border(context)),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Padding(
@@ -835,19 +838,19 @@ class _PromptInspectorScreenState extends State<PromptInspectorScreen> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF8F9FA),
+                    color: AppThemeColors.subCardBg(context),
                     borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: const Color(0xFFE2E4E8)),
+                    border: Border.all(color: AppThemeColors.border(context)),
                   ),
                   child: targetResp.isEmpty
-                      ? const Text(
+                      ? Text(
                           '(No output generated)',
-                          style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, color: Colors.grey),
+                          style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, color: AppThemeColors.textMuted(context)),
                         )
                       : FormattedMarkdownView(
                           data: targetResp,
                           shrinkWrap: true,
-                          textStyle: const TextStyle(fontSize: 12.5, height: 1.45, color: Colors.black87),
+                          textStyle: TextStyle(fontSize: 12.5, height: 1.45, color: AppThemeColors.textPrimary(context)),
                         ),
                 ),
               ],

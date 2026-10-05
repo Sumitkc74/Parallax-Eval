@@ -89,6 +89,19 @@ class _OnboardingModalState extends State<OnboardingModal> {
     final step = _steps[_currentStep];
     final isLastStep = _currentStep == _steps.length - 1;
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final dialogBg = isDark ? const Color(0xFF1E2632) : Colors.white;
+    final borderColor = isDark ? const Color(0xFF2E3B4E) : const Color(0xFFD6DBE1);
+    final headerBg = isDark ? const Color(0xFF161D27) : const Color(0xFF1A283B);
+    final cardBg = isDark ? const Color(0xFF263140) : const Color(0xFFF8F9FA);
+    final cardBorder = isDark ? const Color(0xFF334255) : const Color(0xFFE2E4E8);
+    final textHeading = isDark ? Colors.white : const Color(0xFF1A283B);
+    final textBody = isDark ? const Color(0xFFCBD5E1) : const Color(0xFF334155);
+    final textMuted = isDark ? const Color(0xFF94A3B8) : const Color(0xFF5A6675);
+    final footerBg = isDark ? const Color(0xFF19202B) : const Color(0xFFFDFDFD);
+    final footerBorder = isDark ? const Color(0xFF2E3B4E) : const Color(0xFFEAEAEA);
+    final primaryBtnBg = isDark ? const Color(0xFF3B82F6) : const Color(0xFF1A283B);
+
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -96,9 +109,9 @@ class _OnboardingModalState extends State<OnboardingModal> {
         constraints: const BoxConstraints(maxWidth: 580),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: dialogBg,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: const Color(0xFFD6DBE1)),
+            border: Border.all(color: borderColor),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -107,9 +120,9 @@ class _OnboardingModalState extends State<OnboardingModal> {
               // Header
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                decoration: const BoxDecoration(
-                  color: Color(0xFF1A283B),
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(7)),
+                decoration: BoxDecoration(
+                  color: headerBg,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(7)),
                 ),
                 child: Row(
                   children: [
@@ -164,7 +177,9 @@ class _OnboardingModalState extends State<OnboardingModal> {
                     child: Container(
                       height: 3,
                       margin: EdgeInsets.only(right: index < _steps.length - 1 ? 2 : 0),
-                      color: index <= _currentStep ? const Color(0xFF2C3E50) : const Color(0xFFE2E4E8),
+                      color: index <= _currentStep
+                          ? (isDark ? const Color(0xFF60A5FA) : const Color(0xFF2C3E50))
+                          : (isDark ? const Color(0xFF334155) : const Color(0xFFE2E4E8)),
                     ),
                   );
                 }),
@@ -178,19 +193,19 @@ class _OnboardingModalState extends State<OnboardingModal> {
                   children: [
                     Text(
                       step.title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Georgia',
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1A283B),
+                        color: textHeading,
                       ),
                     ),
                     const SizedBox(height: 12),
                     Text(
                       step.description,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
-                        color: Color(0xFF334155),
+                        color: textBody,
                         height: 1.5,
                       ),
                     ),
@@ -200,14 +215,14 @@ class _OnboardingModalState extends State<OnboardingModal> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF8F9FA),
+                        color: cardBg,
                         borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: const Color(0xFFE2E4E8)),
+                        border: Border.all(color: cardBorder),
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(Icons.info_outline, size: 16, color: Color(0xFF1A283B)),
+                          Icon(Icons.info_outline, size: 16, color: isDark ? const Color(0xFF60A5FA) : const Color(0xFF1A283B)),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Column(
@@ -215,18 +230,18 @@ class _OnboardingModalState extends State<OnboardingModal> {
                               children: [
                                 Text(
                                   step.highlightLabel,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xFF1A283B),
+                                    color: textHeading,
                                   ),
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
                                   step.highlightDetail,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 12,
-                                    color: Color(0xFF5A6675),
+                                    color: textMuted,
                                     height: 1.35,
                                   ),
                                 ),
@@ -243,10 +258,10 @@ class _OnboardingModalState extends State<OnboardingModal> {
               // Footer Controls
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFDFDFD),
-                  border: Border(top: BorderSide(color: Color(0xFFEAEAEA))),
-                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(7)),
+                decoration: BoxDecoration(
+                  color: footerBg,
+                  border: Border(top: BorderSide(color: footerBorder)),
+                  borderRadius: const BorderRadius.vertical(bottom: Radius.circular(7)),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -265,14 +280,14 @@ class _OnboardingModalState extends State<OnboardingModal> {
                     else
                       TextButton(
                         onPressed: widget.onDismiss,
-                        child: const Text('Skip Guide', style: TextStyle(fontSize: 12, color: Color(0xFF5A6675))),
+                        child: Text('Skip Guide', style: TextStyle(fontSize: 12, color: textMuted)),
                       ),
 
                     // Forward or Action Buttons
                     if (!isLastStep)
                       ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1A283B),
+                          backgroundColor: primaryBtnBg,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                         ),
@@ -297,7 +312,7 @@ class _OnboardingModalState extends State<OnboardingModal> {
                           ),
                           ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF1A283B),
+                              backgroundColor: primaryBtnBg,
                               foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                             ),

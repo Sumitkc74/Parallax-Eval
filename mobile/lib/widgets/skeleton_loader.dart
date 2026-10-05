@@ -63,11 +63,12 @@ class SkeletonLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: const Color(0xFFE5E5DF),
+        color: isDark ? const Color(0xFF2C3848) : const Color(0xFFE5E5DF),
         borderRadius: BorderRadius.circular(borderRadius),
       ),
     );
@@ -80,13 +81,17 @@ class SkeletonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? const Color(0xFF1E2632) : Colors.white,
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: const Color(0xFFE2E4E8), width: 1.0),
+        border: Border.all(
+          color: isDark ? const Color(0xFF2E3B4E) : const Color(0xFFE2E4E8),
+          width: 1.0,
+        ),
       ),
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,6 +122,10 @@ class SkeletonDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardColor = isDark ? const Color(0xFF1E2632) : Colors.white;
+    final borderColor = isDark ? const Color(0xFF2E3B4E) : const Color(0xFFE2E4E8);
+
     return SkeletonLoader(
       child: ListView(
         padding: const EdgeInsets.all(16),
@@ -125,9 +134,9 @@ class SkeletonDashboard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: cardColor,
               borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: const Color(0xFFE2E4E8)),
+              border: Border.all(color: borderColor),
             ),
             child: const Row(
               children: [
@@ -142,9 +151,9 @@ class SkeletonDashboard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: cardColor,
               borderRadius: BorderRadius.circular(6),
-              border: Border.all(color: const Color(0xFFE2E4E8)),
+              border: Border.all(color: borderColor),
             ),
             child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,

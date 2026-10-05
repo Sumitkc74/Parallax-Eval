@@ -75,9 +75,9 @@ class _ComparisonScreenState extends State<ComparisonScreen> {
                     constraints: const BoxConstraints(maxWidth: 440),
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppThemeColors.cardBg(context),
                       borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: const Color(0xFFE2E4E8)),
+                      border: Border.all(color: AppThemeColors.border(context)),
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -85,27 +85,27 @@ class _ComparisonScreenState extends State<ComparisonScreen> {
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFF1F3F5),
+                            color: AppThemeColors.subCardBg(context),
                             shape: BoxShape.circle,
-                            border: Border.all(color: const Color(0xFFE2E4E8)),
+                            border: Border.all(color: AppThemeColors.border(context)),
                           ),
-                          child: const Icon(Icons.compare_arrows_outlined, size: 28, color: Color(0xFF5A6675)),
+                          child: Icon(Icons.compare_arrows_outlined, size: 28, color: AppThemeColors.textMuted(context)),
                         ),
                         const SizedBox(height: 14),
-                        const Text(
+                        Text(
                           'No Completed Experiments Found',
                           style: TextStyle(
                             fontFamily: 'Georgia',
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF1A283B),
+                            color: AppThemeColors.textPrimary(context),
                           ),
                         ),
                         const SizedBox(height: 8),
-                        const Text(
+                        Text(
                           'Comparative analysis requires at least one completed evaluation run to inspect regression diffs and safety parity benchmarks.',
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 12, color: Color(0xFF5A6675), height: 1.4),
+                          style: TextStyle(fontSize: 12, color: AppThemeColors.textMuted(context), height: 1.4),
                         ),
                         const SizedBox(height: 18),
                         ElevatedButton.icon(
