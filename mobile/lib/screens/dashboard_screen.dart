@@ -14,6 +14,7 @@ import 'comparison_screen.dart';
 import 'create_custom_prompt_dialog.dart';
 import 'legal_compliance_screen.dart';
 import 'prompt_inspector_screen.dart';
+import '../widgets/onboarding_modal.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -368,6 +369,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   );
                 },
               ),
+              ListTile(
+                leading: const Icon(Icons.help_outline, color: Color(0xFF1A283B)),
+                title: const Text('Guided Walkthrough', style: TextStyle(fontSize: 13)),
+                onTap: () {
+                  Navigator.pop(context);
+                  OnboardingModal.show(
+                    context,
+                    onLaunchExperiment: () {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (_) => CreateExperimentDialog(onCreated: _loadDashboard),
+                      );
+                    },
+                    onOpenInspector: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const PromptInspectorScreen()),
+                      );
+                    },
+                  );
+                },
+              ),
               const Divider(),
               ListTile(
                 leading: const Icon(Icons.gavel_outlined, color: Color(0xFF1A283B)),
@@ -518,6 +542,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 setState(() {
                   ThemeController.instance.toggleTheme();
                 });
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.help_outline, size: 20),
+              tooltip: 'Guided Walkthrough / Help',
+              onPressed: () {
+                OnboardingModal.show(
+                  context,
+                  onLaunchExperiment: () {
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) => CreateExperimentDialog(onCreated: _loadDashboard),
+                    );
+                  },
+                  onOpenInspector: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const PromptInspectorScreen()),
+                    );
+                  },
+                );
               },
             ),
             IconButton(
@@ -700,6 +746,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 spacing: 8,
                                 runSpacing: 8,
                                 children: [
+                                  ElevatedButton.icon(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF1A283B),
+                                      foregroundColor: Colors.white,
+                                      visualDensity: VisualDensity.compact,
+                                    ),
+                                    icon: const Icon(Icons.menu_book_outlined, size: 14),
+                                    label: const Text('How It Works', style: TextStyle(fontSize: 12)),
+                                    onPressed: () {
+                                      OnboardingModal.show(
+                                        context,
+                                        onLaunchExperiment: () {
+                                          showDialog(
+                                            context: context,
+                                            barrierDismissible: false,
+                                            builder: (_) => CreateExperimentDialog(onCreated: _loadDashboard),
+                                          );
+                                        },
+                                        onOpenInspector: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (_) => const PromptInspectorScreen()),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
                                   OutlinedButton(
                                     onPressed: () => Navigator.push(
                                       context,
@@ -949,16 +1022,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   style: TextStyle(fontSize: 12, color: Color(0xFF5A6675), height: 1.4),
                                 ),
                                 const SizedBox(height: 18),
-                                ElevatedButton.icon(
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (_) => CreateExperimentDialog(onCreated: _loadDashboard),
-                                    );
-                                  },
-                                  icon: const Icon(Icons.play_arrow_outlined, size: 16),
-                                  label: const Text('Launch First Experiment', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                                Wrap(
+                                  spacing: 10,
+                                  runSpacing: 10,
+                                  alignment: WrapAlignment.center,
+                                  children: [
+                                    OutlinedButton.icon(
+                                      onPressed: () {
+                                        OnboardingModal.show(
+                                          context,
+                                          onLaunchExperiment: () {
+                                            showDialog(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder: (_) => CreateExperimentDialog(onCreated: _loadDashboard),
+                                            );
+                                          },
+                                          onOpenInspector: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(builder: (_) => const PromptInspectorScreen()),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      icon: const Icon(Icons.menu_book_outlined, size: 16),
+                                      label: const Text('Read Quick Walkthrough', style: TextStyle(fontSize: 12)),
+                                    ),
+                                    ElevatedButton.icon(
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          barrierDismissible: false,
+                                          builder: (_) => CreateExperimentDialog(onCreated: _loadDashboard),
+                                        );
+                                      },
+                                      icon: const Icon(Icons.play_arrow_outlined, size: 16),
+                                      label: const Text('Launch First Experiment', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
