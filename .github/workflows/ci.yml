@@ -1,6 +1,6 @@
 name: Backend CI/CD Pipeline
 
-on:
+"on":
   push:
     branches: [ main, master ]
   pull_request:
@@ -48,7 +48,7 @@ jobs:
 
       - name: Run Pytest Suite with Mock LLM
         env:
-          DATABASE_URL: sqlite+aiosqlite:///:memory:
+          DATABASE_URL: "sqlite+aiosqlite:///:memory:"
           USE_MOCK_LLM: "true"
         run: |
           pytest -v
