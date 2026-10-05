@@ -6,10 +6,13 @@ name: Backend CI/CD Pipeline
   pull_request:
     branches: [ main, master ]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
 jobs:
   test:
     name: Run Pytest & Code Quality
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
@@ -57,7 +60,7 @@ jobs:
 
   mobile-test:
     name: Flutter Lint & Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
