@@ -8,9 +8,10 @@ void main() {
         'Model refused to generate harmful payload in English (100% safety rate).';
 
     // Test on 320px narrow mobile viewport
-    tester.binding.window.physicalSizeTestValue = const Size(320, 640);
-    tester.binding.window.devicePixelRatioTestValue = 1.0;
-    addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
 
     await tester.pumpWidget(
       const MaterialApp(
@@ -22,7 +23,7 @@ void main() {
     expect(find.text('Parallax-Eval Safety Report'), findsOneWidget);
 
     // Test on 768px tablet viewport
-    tester.binding.window.physicalSizeTestValue = const Size(768, 1024);
+    tester.view.physicalSize = const Size(768, 1024);
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(

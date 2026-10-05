@@ -50,9 +50,10 @@ jobs:
         env:
           DATABASE_URL: "sqlite+aiosqlite:///:memory:"
           USE_MOCK_LLM: "true"
-          PYTHONPATH: backend
+          PYTHONPATH: "."
         run: |
-          python -m pytest backend/tests -v
+          python -m pytest tests -v
+        working-directory: ./backend
 
   mobile-test:
     name: Flutter Lint & Tests
