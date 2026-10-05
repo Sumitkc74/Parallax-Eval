@@ -1,0 +1,84 @@
+name: Backend CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    name: Run Pytest & Code Quality
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: parallax_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: parallax_test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Verify Benchmark Dataset Integrity & Hash
+        run: |
+          python -m app.cli verify-dataset
+        working-directory: ./backend
+
+      - name: Run Pytest Suite with Mock LLM
+        env:
+          DATABASE_URL: sqlite+aiosqlite:///:memory:
+          USE_MOCK_LLM: "true"
+        run: |
+          pytest -v
+
+  mobile-test:
+    name: Flutter Lint & Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          cache: true
+
+      - name: Install Mobile Dependencies
+        run: |
+          cd mobile
+          flutter pub get
+
+      - name: Run Flutter Analyzer
+        run: |
+          cd mobile
+          flutter analyze
+
+      - name: Run Flutter Widget Tests
+        run: |
+          cd mobile
+          flutter test
+
+

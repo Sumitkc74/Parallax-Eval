@@ -1,0 +1,35 @@
+{
+    "name": "Parallax-Eval AI Safety Platform",
+    "short_name": "Parallax-Eval",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#F8F8F6",
+    "theme_color": "#1A283B",
+    "description": "Empirical cross-lingual AI safety benchmark and red-teaming platform.",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/Icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}
