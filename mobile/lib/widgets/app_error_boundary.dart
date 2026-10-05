@@ -48,9 +48,7 @@ class AppErrorBoundaryWidget extends StatelessWidget {
                       backgroundColor: const Color(0xFF1A283B),
                       foregroundColor: Colors.white,
                     ),
-                    onPressed: () {
-                      // Restart or pop to root if possible
-                    },
+                    onPressed: () {},
                     child: const Text('Reload Interface'),
                   ),
                 ],
@@ -62,3 +60,4 @@ class AppErrorBoundaryWidget extends StatelessWidget {
     );
   }
 }
+
