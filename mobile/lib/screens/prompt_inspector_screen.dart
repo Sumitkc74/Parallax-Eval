@@ -492,39 +492,52 @@ class _PromptInspectorScreenState extends State<PromptInspectorScreen> {
     final bothUnsafe = !baseSafe && !defSafe;
     final overRefusalIntroduced = baseSafe && !defSafe && defLabel.contains('Over-Refusal');
 
+    final isDark = AppThemeColors.isDark(context);
     Color bannerColor;
     Color borderColor;
+    Color titleColor;
+    Color textColor;
     IconData bannerIcon;
     String bannerTitle;
     String bannerSubtitle;
 
     if (isRemediated) {
-      bannerColor = Colors.green.shade50;
-      borderColor = Colors.green.shade800;
+      bannerColor = isDark ? const Color(0xFF14291E) : Colors.green.shade50;
+      borderColor = isDark ? const Color(0xFF2E7D32) : Colors.green.shade800;
+      titleColor = isDark ? const Color(0xFF68D391) : Colors.green.shade800;
+      textColor = isDark ? const Color(0xFFE2E8F0) : Colors.black87;
       bannerIcon = Icons.verified_user;
       bannerTitle = 'Remediation Succeeded!';
       bannerSubtitle = 'Baseline permitted $baseLabel, but defense successfully achieved $defLabel.';
     } else if (bothSafe) {
-      bannerColor = Colors.teal.shade50;
-      borderColor = Colors.teal.shade800;
+      bannerColor = isDark ? const Color(0xFF132B2B) : Colors.teal.shade50;
+      borderColor = isDark ? const Color(0xFF26A69A) : Colors.teal.shade800;
+      titleColor = isDark ? const Color(0xFF4FD1C5) : Colors.teal.shade800;
+      textColor = isDark ? const Color(0xFFE2E8F0) : Colors.black87;
       bannerIcon = Icons.shield;
       bannerTitle = 'Both Configurations Safe';
       bannerSubtitle = 'Both baseline and defended configurations safely handled this input.';
     } else if (overRefusalIntroduced) {
-      bannerColor = Colors.orange.shade50;
-      borderColor = Colors.orange.shade800;
+      bannerColor = isDark ? const Color(0xFF332313) : Colors.orange.shade50;
+      borderColor = isDark ? const Color(0xFFD97706) : Colors.orange.shade800;
+      titleColor = isDark ? const Color(0xFFFBD38D) : Colors.orange.shade800;
+      textColor = isDark ? const Color(0xFFE2E8F0) : Colors.black87;
       bannerIcon = Icons.warning_amber_rounded;
       bannerTitle = 'Over-Refusal Introduced';
       bannerSubtitle = 'Baseline permitted benign output, but defense over-refused.';
     } else if (bothUnsafe) {
-      bannerColor = Colors.red.shade50;
-      borderColor = Colors.red.shade800;
+      bannerColor = isDark ? const Color(0xFF331616) : Colors.red.shade50;
+      borderColor = isDark ? const Color(0xFFEF4444) : Colors.red.shade800;
+      titleColor = isDark ? const Color(0xFFFEB2B2) : Colors.red.shade800;
+      textColor = isDark ? const Color(0xFFE2E8F0) : Colors.black87;
       bannerIcon = Icons.gpp_bad;
       bannerTitle = 'Defense Ineffective';
       bannerSubtitle = 'Both baseline and defended configurations permitted unsafe compliance.';
     } else {
-      bannerColor = Colors.indigo.shade50;
-      borderColor = Colors.indigo;
+      bannerColor = isDark ? const Color(0xFF1A2338) : Colors.indigo.shade50;
+      borderColor = isDark ? const Color(0xFF6366F1) : Colors.indigo;
+      titleColor = isDark ? const Color(0xFFA5B4FC) : Colors.indigo;
+      textColor = isDark ? const Color(0xFFE2E8F0) : Colors.black87;
       bannerIcon = Icons.compare_arrows;
       bannerTitle = 'Differential Behavior Observed';
       bannerSubtitle = 'Baseline: $baseLabel  |  Defended: $defLabel';
@@ -549,12 +562,12 @@ class _PromptInspectorScreenState extends State<PromptInspectorScreen> {
                 children: [
                   Text(
                     bannerTitle,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: borderColor),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: titleColor),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     bannerSubtitle,
-                    style: const TextStyle(fontSize: 12, color: Colors.black87),
+                    style: TextStyle(fontSize: 12, color: textColor),
                   ),
                 ],
               ),
@@ -711,18 +724,30 @@ class _PromptInspectorScreenState extends State<PromptInspectorScreen> {
                         children: [
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(4)),
-                            child: Text('Lang: ${lang.toUpperCase()}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                            decoration: BoxDecoration(
+                              color: AppThemeColors.subCardBg(context),
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(color: AppThemeColors.border(context)),
+                            ),
+                            child: Text('Lang: ${lang.toUpperCase()}', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppThemeColors.textPrimary(context))),
                           ),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(4)),
-                            child: Text('Confidence: ${(confidence * 100).toStringAsFixed(0)}%', style: const TextStyle(fontSize: 10)),
+                            decoration: BoxDecoration(
+                              color: AppThemeColors.subCardBg(context),
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(color: AppThemeColors.border(context)),
+                            ),
+                            child: Text('Confidence: ${(confidence * 100).toStringAsFixed(0)}%', style: TextStyle(fontSize: 10, color: AppThemeColors.textPrimary(context))),
                           ),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(4)),
-                            child: Text('Latency: ${latency}ms', style: const TextStyle(fontSize: 10)),
+                            decoration: BoxDecoration(
+                              color: AppThemeColors.subCardBg(context),
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(color: AppThemeColors.border(context)),
+                            ),
+                            child: Text('Latency: ${latency}ms', style: TextStyle(fontSize: 10, color: AppThemeColors.textPrimary(context))),
                           ),
                         ],
                       ),
@@ -738,8 +763,9 @@ class _PromptInspectorScreenState extends State<PromptInspectorScreen> {
         // 1. Guardrail Status
         Card(
           elevation: 0,
+          color: AppThemeColors.cardBg(context),
           shape: RoundedRectangleBorder(
-            side: const BorderSide(color: Color(0xFFE2E4E8)),
+            side: BorderSide(color: AppThemeColors.border(context)),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Padding(
@@ -750,17 +776,19 @@ class _PromptInspectorScreenState extends State<PromptInspectorScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Row(
+                    Row(
                       children: [
-                        Icon(Icons.security, size: 18, color: Colors.indigo),
-                        SizedBox(width: 8),
-                        Text('Perimeter Guardrail Layer', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                        Icon(Icons.security, size: 18, color: AppThemeColors.isDark(context) ? const Color(0xFF60A5FA) : Colors.indigo),
+                        const SizedBox(width: 8),
+                        Text('Perimeter Guardrail Layer', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppThemeColors.textPrimary(context))),
                       ],
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
-                        color: intervened ? Colors.orange.shade100 : Colors.blueGrey.shade100,
+                        color: intervened
+                            ? (AppThemeColors.isDark(context) ? const Color(0xFF452414) : Colors.orange.shade100)
+                            : (AppThemeColors.isDark(context) ? const Color(0xFF1E2836) : Colors.blueGrey.shade100),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
@@ -768,7 +796,9 @@ class _PromptInspectorScreenState extends State<PromptInspectorScreen> {
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          color: intervened ? Colors.orange.shade900 : Colors.blueGrey.shade800,
+                          color: intervened
+                              ? (AppThemeColors.isDark(context) ? const Color(0xFFFBD38D) : Colors.orange.shade900)
+                              : (AppThemeColors.isDark(context) ? const Color(0xFF94A3B8) : Colors.blueGrey.shade800),
                         ),
                       ),
                     ),
@@ -862,8 +892,9 @@ class _PromptInspectorScreenState extends State<PromptInspectorScreen> {
         // 3. Multi-Agent Judge-Critic Arbitration
         Card(
           elevation: 0,
+          color: AppThemeColors.cardBg(context),
           shape: RoundedRectangleBorder(
-            side: const BorderSide(color: Color(0xFFE2E4E8)),
+            side: BorderSide(color: AppThemeColors.border(context)),
             borderRadius: BorderRadius.circular(6),
           ),
           child: Padding(
@@ -874,30 +905,30 @@ class _PromptInspectorScreenState extends State<PromptInspectorScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Row(
+                    Row(
                       children: [
-                        Icon(Icons.gavel, size: 18, color: Colors.indigo),
-                        SizedBox(width: 8),
-                        Text('Multi-Agent Judge & Critic Verification', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                        Icon(Icons.gavel, size: 18, color: AppThemeColors.isDark(context) ? const Color(0xFF60A5FA) : Colors.indigo),
+                        const SizedBox(width: 8),
+                        Text('Multi-Agent Judge & Critic Verification', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppThemeColors.textPrimary(context))),
                       ],
                     ),
                     Text('Judge: $judgeLabel', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: verdictColor)),
                   ],
                 ),
                 const SizedBox(height: 8),
-                const Text('Judge Reasoning:', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey)),
+                Text('Judge Reasoning:', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppThemeColors.textMuted(context))),
                 const SizedBox(height: 2),
                 FormattedInlineText(
                   text: judgeReasoning.isEmpty ? '(No reasoning recorded)' : judgeReasoning,
-                  style: const TextStyle(fontSize: 12, height: 1.4),
+                  style: TextStyle(fontSize: 12, height: 1.4, color: AppThemeColors.textPrimary(context)),
                 ),
                 if (criticCritique.isNotEmpty) ...[
                   const SizedBox(height: 8),
-                  const Text('Adversarial Critic Evaluation:', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey)),
+                  Text('Adversarial Critic Evaluation:', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppThemeColors.textMuted(context))),
                   const SizedBox(height: 2),
                   FormattedInlineText(
                     text: criticCritique,
-                    style: const TextStyle(fontSize: 12, fontStyle: FontStyle.italic, height: 1.4),
+                    style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic, height: 1.4, color: AppThemeColors.textPrimary(context)),
                   ),
                 ],
               ],

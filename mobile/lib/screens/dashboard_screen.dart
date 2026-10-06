@@ -31,6 +31,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Timer? _pollTimer;
   final Set<String> _processingExpIds = <String>{};
   bool _showReferenceCard = false;
+  bool _showAllExperiments = false;
 
   @override
   void initState() {
@@ -1154,8 +1155,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ],
                             ),
                           )
-                        else
-                          ..._experiments.map((exp) {
+                        else ...[
+                          ...(_showAllExperiments ? _experiments : _experiments.take(3)).map((exp) {
                             final statusStyle = _getStatusStyle(exp.status);
                             return Container(
                               margin: const EdgeInsets.only(bottom: 10),
@@ -1261,6 +1262,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                             );
                           }),
+                          if (_experiments.length > 3)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Center(
+                                child: TextButton.icon(
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: AppThemeColors.isDark(context) ? const Color(0xFF60A5FA) : const Color(0xFF1A283B),
+                                  ),
+                                  icon: Icon(
+                                    _showAllExperiments ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                                    size: 16,
+                                  ),
+                                  label: Text(
+                                    _showAllExperiments
+                                        ? 'Show Fewer (Top 3)'
+                                        : 'View All Runs (${_experiments.length})',
+                                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _showAllExperiments = !_showAllExperiments;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                        ],
 
                         const SizedBox(height: 24),
                         Divider(color: AppThemeColors.border(context)),
