@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 
 class DataConsentDialog extends StatefulWidget {
   final VoidCallback? onConsentGiven;
@@ -18,15 +19,20 @@ class _DataConsentDialogState extends State<DataConsentDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final textPrimary = AppThemeColors.textPrimary(context);
+    final textMuted = AppThemeColors.textMuted(context);
+    final isDark = AppThemeColors.isDark(context);
+    final brandBlue = isDark ? const Color(0xFF60A5FA) : const Color(0xFF1E3A8A);
+
     return AlertDialog(
-      title: const Row(
+      title: Row(
         children: [
-          Icon(Icons.verified_user_outlined, color: Color(0xFF1E3A8A)),
-          SizedBox(width: 8),
+          Icon(Icons.verified_user_outlined, color: brandBlue),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
               'Research Ethics & Data Consent',
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: textPrimary),
             ),
           ),
         ],
@@ -41,28 +47,28 @@ class _DataConsentDialogState extends State<DataConsentDialog> {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
+                  color: AppThemeColors.subCardBg(context),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.blue.shade200),
+                  border: Border.all(color: AppThemeColors.border(context)),
                 ),
-                child: const Text(
+                child: Text(
                   'Parallax-Eval is an open-source research platform evaluating cross-lingual AI safety (English vs. Nepali). '
                   'Please review the data governance conditions below before submitting prompts.',
-                  style: TextStyle(fontSize: 12, color: Colors.black87),
+                  style: TextStyle(fontSize: 12, color: textPrimary),
                 ),
               ),
               const SizedBox(height: 12),
-              const Text(
+              Text(
                 'Data Processing & Storage Disclosures:',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: textPrimary),
               ),
               const SizedBox(height: 6),
-              _buildBullet('Prompts are stored locally in the evaluation database for scientific benchmarking.'),
-              _buildBullet('Target models receive prompts via TLS 1.3 to customer-configured API endpoints.'),
-              _buildBullet('No tracking, profiling, or third-party advertising cookies are used.'),
-              _buildBullet('You have the statutory right to correct (PUT) or permanently delete (DELETE) your custom data at any time (GDPR / Nepal Privacy Act 2075).'),
+              _buildBullet('Prompts are stored locally in the evaluation database for scientific benchmarking.', context),
+              _buildBullet('Target models receive prompts via TLS 1.3 to customer-configured API endpoints.', context),
+              _buildBullet('No tracking, profiling, or third-party advertising cookies are used.', context),
+              _buildBullet('You have the statutory right to correct (PUT) or permanently delete (DELETE) your custom data at any time (GDPR / Nepal Privacy Act 2075).', context),
               const SizedBox(height: 12),
-              const Divider(),
+              Divider(color: AppThemeColors.border(context)),
               const SizedBox(height: 8),
 
               // Checkbox 1: Age
@@ -70,14 +76,14 @@ class _DataConsentDialogState extends State<DataConsentDialog> {
                 contentPadding: EdgeInsets.zero,
                 dense: true,
                 value: _ageConfirmed,
-                activeColor: const Color(0xFF1E3A8A),
-                title: const Text(
+                activeColor: brandBlue,
+                title: Text(
                   'I confirm that I am at least 18 years of age (or legal age of majority).',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: textPrimary),
                 ),
-                subtitle: const Text(
+                subtitle: Text(
                   'Minors are not permitted due to adversarial and hazardous content testing.',
-                  style: TextStyle(fontSize: 10, color: Colors.grey),
+                  style: TextStyle(fontSize: 10, color: textMuted),
                 ),
                 onChanged: (val) => setState(() => _ageConfirmed = val ?? false),
               ),
@@ -87,14 +93,14 @@ class _DataConsentDialogState extends State<DataConsentDialog> {
                 contentPadding: EdgeInsets.zero,
                 dense: true,
                 value: _noPiiAgreed,
-                activeColor: const Color(0xFF1E3A8A),
-                title: const Text(
+                activeColor: brandBlue,
+                title: Text(
                   'I agree NOT to submit Personally Identifiable Information (PII) or confidential secrets.',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: textPrimary),
                 ),
-                subtitle: const Text(
+                subtitle: Text(
                   'Do not input real names, citizenship/national ID, passwords, or medical records.',
-                  style: TextStyle(fontSize: 10, color: Colors.grey),
+                  style: TextStyle(fontSize: 10, color: textMuted),
                 ),
                 onChanged: (val) => setState(() => _noPiiAgreed = val ?? false),
               ),
@@ -104,14 +110,14 @@ class _DataConsentDialogState extends State<DataConsentDialog> {
                 contentPadding: EdgeInsets.zero,
                 dense: true,
                 value: _researchPurposeUnderstood,
-                activeColor: const Color(0xFF1E3A8A),
-                title: const Text(
+                activeColor: brandBlue,
+                title: Text(
                   'I understand this is an evaluation tool and does NOT provide high-risk or professional advice.',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: textPrimary),
                 ),
-                subtitle: const Text(
+                subtitle: Text(
                   'Model outputs must never be used for real-world weapons, attacks, or medical/legal guidance.',
-                  style: TextStyle(fontSize: 10, color: Colors.grey),
+                  style: TextStyle(fontSize: 10, color: textMuted),
                 ),
                 onChanged: (val) => setState(() => _researchPurposeUnderstood = val ?? false),
               ),
@@ -126,7 +132,7 @@ class _DataConsentDialogState extends State<DataConsentDialog> {
         ),
         ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
-            backgroundColor: _canProceed ? const Color(0xFF1E3A8A) : Colors.grey,
+            backgroundColor: _canProceed ? (isDark ? const Color(0xFF3B82F6) : const Color(0xFF1E3A8A)) : Colors.grey,
             foregroundColor: Colors.white,
           ),
           icon: const Icon(Icons.check, size: 16),
@@ -142,17 +148,16 @@ class _DataConsentDialogState extends State<DataConsentDialog> {
     );
   }
 
-  Widget _buildBullet(String text) {
+  Widget _buildBullet(String text, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('• ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-          Expanded(child: Text(text, style: const TextStyle(fontSize: 11, color: Colors.black87))),
+          Text('• ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: AppThemeColors.textMuted(context))),
+          Expanded(child: Text(text, style: TextStyle(fontSize: 11, color: AppThemeColors.textPrimary(context)))),
         ],
       ),
     );
   }
 }
-

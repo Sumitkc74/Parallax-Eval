@@ -11,14 +11,31 @@ class ThemeController extends ChangeNotifier {
 
   ThemeMode get themeMode => _themeMode;
 
-  /// Toggles between light, dark, and system theme modes.
-  void toggleTheme() {
-    if (_themeMode == ThemeMode.dark) {
+  /// Returns whether dark mode is currently active, taking context and platform into account.
+  bool isDark([BuildContext? context]) {
+    if (_themeMode == ThemeMode.dark) return true;
+    if (_themeMode == ThemeMode.light) return false;
+    if (context != null) {
+      return Theme.of(context).brightness == Brightness.dark;
+    }
+    return WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
+  }
+
+  /// Explicitly set the theme mode (system, light, or dark).
+  void setThemeMode(ThemeMode mode) {
+    if (_themeMode != mode) {
+      _themeMode = mode;
+      notifyListeners();
+    }
+  }
+
+  /// Toggles cleanly between Light and Dark mode.
+  /// If currently effective is Dark, switches to Light.
+  /// If currently effective is Light, switches to Dark.
+  void toggleTheme([BuildContext? context]) {
+    if (isDark(context)) {
       _themeMode = ThemeMode.light;
-    } else if (_themeMode == ThemeMode.light) {
-      _themeMode = ThemeMode.system;
     } else {
-      // If currently system, default to dark.
       _themeMode = ThemeMode.dark;
     }
     notifyListeners();

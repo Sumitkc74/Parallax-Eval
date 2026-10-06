@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 
 /// A lightweight, zero-dependency Markdown & RichText renderer for Parallax-Eval.
 /// Automatically formats:
@@ -54,7 +55,7 @@ class FormattedMarkdownView extends StatelessWidget {
     Color? linkColor,
     Color? codeBgColor,
   }) {
-    final style = baseStyle ?? const TextStyle(fontSize: 13, color: Colors.black87, height: 1.4);
+    final style = baseStyle ?? const TextStyle(fontSize: 13, height: 1.4);
     final link = linkColor ?? Colors.indigo.shade700;
     final codeBg = codeBgColor ?? Colors.grey.shade200;
 
@@ -82,7 +83,7 @@ class FormattedMarkdownView extends StatelessWidget {
             decoration: BoxDecoration(
               color: codeBg,
               borderRadius: BorderRadius.circular(4),
-              border: Border.all(color: Colors.grey.shade300, width: 0.8),
+              border: Border.all(color: Colors.grey.shade400, width: 0.8),
             ),
             child: Text(
               codeText,
@@ -90,7 +91,6 @@ class FormattedMarkdownView extends StatelessWidget {
                 fontFamily: 'monospace',
                 fontSize: (style.fontSize ?? 13) * 0.88,
                 fontWeight: FontWeight.w600,
-                color: Colors.indigo.shade900,
               ),
             ),
           ),
@@ -220,7 +220,13 @@ class FormattedMarkdownView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveStyle = textStyle ?? const TextStyle(fontSize: 13, color: Colors.black87, height: 1.45);
+    final isDark = AppThemeColors.isDark(context);
+    final effectiveStyle = textStyle ??
+        TextStyle(
+          fontSize: 13,
+          color: isDark ? Colors.white : Colors.black87,
+          height: 1.45,
+        );
     final blocks = _parseBlocks(data);
 
     final widgets = <Widget>[];
@@ -252,23 +258,27 @@ class FormattedMarkdownView extends StatelessWidget {
   }
 
   Widget _buildBlockWidget(BuildContext context, _Block block, TextStyle baseStyle) {
+    final isDark = AppThemeColors.isDark(context);
+    final brandColor = isDark ? const Color(0xFF90CDF4) : const Color(0xFF1E3A8A);
+    final headingDark = isDark ? Colors.white : Colors.black87;
+
     switch (block.type) {
       case _BlockType.h1:
-        return _renderHeading(block.text, 20, FontWeight.bold, const Color(0xFF1E3A8A));
+        return _renderHeading(block.text, 20, FontWeight.bold, brandColor);
       case _BlockType.h2:
-        return _renderHeading(block.text, 16.5, FontWeight.bold, const Color(0xFF1E3A8A));
+        return _renderHeading(block.text, 16.5, FontWeight.bold, brandColor);
       case _BlockType.h3:
-        return _renderHeading(block.text, 14.5, FontWeight.bold, Colors.black87);
+        return _renderHeading(block.text, 14.5, FontWeight.bold, headingDark);
       case _BlockType.h4:
-        return _renderHeading(block.text, 13.5, FontWeight.w600, Colors.black87);
+        return _renderHeading(block.text, 13.5, FontWeight.w600, headingDark);
       case _BlockType.divider:
-        return const Divider(height: 24, thickness: 1);
+        return Divider(height: 24, thickness: 1, color: isDark ? const Color(0xFF2E3B4E) : const Color(0xFFE2E4E8));
       case _BlockType.codeBlock:
-        return _renderCodeBlock(block.text);
+        return _renderCodeBlock(context, block.text);
       case _BlockType.blockquote:
-        return _renderBlockquote(block.text, baseStyle);
+        return _renderBlockquote(context, block.text, baseStyle);
       case _BlockType.table:
-        return _renderTable(block.rows, baseStyle);
+        return _renderTable(context, block.rows, baseStyle);
       case _BlockType.bulletItem:
         return _renderBulletItem(block.text, baseStyle);
       case _BlockType.numberedItem:
@@ -390,21 +400,25 @@ class FormattedMarkdownView extends StatelessWidget {
     );
   }
 
-  Widget _renderBlockquote(String text, TextStyle baseStyle) {
+  Widget _renderBlockquote(BuildContext context, String text, TextStyle baseStyle) {
+    final isDark = AppThemeColors.isDark(context);
     final spans = parseInlineSpans(
       text,
       baseStyle: baseStyle.copyWith(
         fontStyle: FontStyle.italic,
-        color: Colors.blueGrey.shade800,
+        color: isDark ? const Color(0xFFCBD5E1) : Colors.blueGrey.shade800,
       ),
     );
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.indigo.shade50.withAlpha(25),
-        border: const Border(
-          left: BorderSide(color: Color(0xFF1E3A8A), width: 3.5),
+        color: isDark ? const Color(0xFF1E2836) : Colors.indigo.shade50.withAlpha(25),
+        border: Border(
+          left: BorderSide(
+            color: isDark ? const Color(0xFF60A5FA) : const Color(0xFF1E3A8A),
+            width: 3.5,
+          ),
         ),
         borderRadius: const BorderRadius.horizontal(right: Radius.circular(6)),
       ),
@@ -414,51 +428,54 @@ class FormattedMarkdownView extends StatelessWidget {
     );
   }
 
-  Widget _renderCodeBlock(String code) {
+  Widget _renderCodeBlock(BuildContext context, String code) {
+    final isDark = AppThemeColors.isDark(context);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: isDark ? const Color(0xFF161E28) : Colors.grey.shade100,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey.shade300),
+        border: Border.all(color: isDark ? const Color(0xFF2E3B4E) : Colors.grey.shade300),
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: selectable
             ? SelectableText(
                 code,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'monospace',
                   fontSize: 11.5,
                   height: 1.4,
-                  color: Colors.black87,
+                  color: isDark ? const Color(0xFFE2E8F0) : Colors.black87,
                 ),
               )
             : Text(
                 code,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'monospace',
                   fontSize: 11.5,
                   height: 1.4,
-                  color: Colors.black87,
+                  color: isDark ? const Color(0xFFE2E8F0) : Colors.black87,
                 ),
               ),
       ),
     );
   }
 
-  Widget _renderTable(List<List<String>> rows, TextStyle baseStyle) {
+  Widget _renderTable(BuildContext context, List<List<String>> rows, TextStyle baseStyle) {
     if (rows.isEmpty) return const SizedBox.shrink();
 
+    final isDark = AppThemeColors.isDark(context);
     final headerRow = rows.first;
     final dataRows = rows.length > 1 ? rows.sublist(1) : <List<String>>[];
 
     return Card(
       elevation: 0,
+      color: isDark ? const Color(0xFF1E2632) : Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(6),
-        side: const BorderSide(color: Color(0xFFE2E4E8)),
+        side: BorderSide(color: isDark ? const Color(0xFF2E3B4E) : const Color(0xFFE2E4E8)),
       ),
       clipBehavior: Clip.antiAlias,
       child: SingleChildScrollView(
@@ -466,13 +483,13 @@ class FormattedMarkdownView extends StatelessWidget {
         child: Table(
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           border: TableBorder(
-            horizontalInside: BorderSide(color: Colors.grey.shade200, width: 0.8),
-            verticalInside: BorderSide(color: Colors.grey.shade200, width: 0.8),
+            horizontalInside: BorderSide(color: isDark ? const Color(0xFF2E3B4E) : Colors.grey.shade200, width: 0.8),
+            verticalInside: BorderSide(color: isDark ? const Color(0xFF2E3B4E) : Colors.grey.shade200, width: 0.8),
           ),
           children: [
             // Header Row
             TableRow(
-              decoration: BoxDecoration(color: Colors.indigo.shade50.withAlpha(50)),
+              decoration: BoxDecoration(color: isDark ? const Color(0xFF243040) : Colors.indigo.shade50.withAlpha(50)),
               children: headerRow.map((cell) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -483,7 +500,7 @@ class FormattedMarkdownView extends StatelessWidget {
                         baseStyle: baseStyle.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: (baseStyle.fontSize ?? 13) * 0.95,
-                          color: const Color(0xFF1E3A8A),
+                          color: isDark ? const Color(0xFF90CDF4) : const Color(0xFF1E3A8A),
                         ),
                       ),
                     ),
@@ -499,7 +516,9 @@ class FormattedMarkdownView extends StatelessWidget {
 
               return TableRow(
                 decoration: BoxDecoration(
-                  color: isAlt ? Colors.grey.shade50 : Colors.white,
+                  color: isDark
+                      ? (isAlt ? const Color(0xFF18202A) : const Color(0xFF1E2632))
+                      : (isAlt ? Colors.grey.shade50 : Colors.white),
                 ),
                 children: row.map((cell) {
                   return Padding(
@@ -510,6 +529,7 @@ class FormattedMarkdownView extends StatelessWidget {
                           cell,
                           baseStyle: baseStyle.copyWith(
                             fontSize: (baseStyle.fontSize ?? 13) * 0.92,
+                            color: isDark ? const Color(0xFFE2E8F0) : null,
                           ),
                         ),
                       ),

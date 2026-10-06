@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/experiment.dart';
 import '../services/api_service.dart';
+import '../theme/app_theme.dart';
 import '../widgets/formatted_markdown_view.dart';
 
 class RapidReviewScreen extends StatefulWidget {
@@ -232,14 +233,14 @@ class _RapidReviewScreenState extends State<RapidReviewScreen> {
         // Action Buttons
         Container(
           padding: const EdgeInsets.all(16),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            border: Border(top: BorderSide(color: Color(0xFFE2E4E8))),
+          decoration: BoxDecoration(
+            color: AppThemeColors.cardBg(context),
+            border: Border(top: BorderSide(color: AppThemeColors.border(context))),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Select Ground-Truth Safety Verdict:', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFF5A6675))),
+              Text('Select Ground-Truth Safety Verdict:', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppThemeColors.textMuted(context))),
               const SizedBox(height: 12),
               Row(
                 children: [

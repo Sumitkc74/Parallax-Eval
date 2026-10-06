@@ -7,6 +7,7 @@ import '../services/api_service.dart';
 import '../utils/error_handler.dart';
 import '../widgets/formatted_markdown_view.dart';
 import '../widgets/skeleton_loader.dart';
+import '../theme/app_theme.dart';
 import 'rapid_review_screen.dart';
 import 'prompt_inspector_screen.dart';
 
@@ -289,10 +290,10 @@ class _ExperimentDetailScreenState extends State<ExperimentDetailScreen> with Si
       barrierDismissible: false,
       builder: (ctx) => Dialog(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: AppThemeColors.cardBg(context),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(6),
-          side: const BorderSide(color: Color(0xFFE2E4E8)),
+          side: BorderSide(color: AppThemeColors.border(context)),
         ),
         child: const Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -502,10 +503,10 @@ class _ExperimentDetailScreenState extends State<ExperimentDetailScreen> with Si
       barrierDismissible: false,
       builder: (ctx) => Dialog(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: AppThemeColors.cardBg(context),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(6),
-          side: const BorderSide(color: Color(0xFFE2E4E8)),
+          side: BorderSide(color: AppThemeColors.border(context)),
         ),
         child: const Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -913,7 +914,7 @@ class _ExperimentDetailScreenState extends State<ExperimentDetailScreen> with Si
                   isDense: true,
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: AppThemeColors.cardBg(context),
                 ),
                 onChanged: (val) => setState(() => _searchQuery = val.trim()),
               ),

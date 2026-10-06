@@ -195,19 +195,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Backend API Endpoint'),
+        title: Text('Backend API Endpoint', style: TextStyle(color: AppThemeColors.textPrimary(context))),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Specify the Parallax-Eval REST API endpoint (e.g., http://127.0.0.1:8000/api/v1 for desktop, '
               'http://10.0.2.2:8000/api/v1 for Android emulator, or your private server IP):',
-              style: TextStyle(fontSize: 12, height: 1.4),
+              style: TextStyle(fontSize: 12, height: 1.4, color: AppThemeColors.textMuted(context)),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: controller,
+              style: TextStyle(color: AppThemeColors.textPrimary(context)),
               decoration: const InputDecoration(border: OutlineInputBorder(), isDense: true),
             ),
           ],
@@ -233,9 +234,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _showSystemPropertiesModal() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final modalBg = isDark ? const Color(0xFF1E2632) : Colors.white;
-    final textHeading = isDark ? Colors.white : const Color(0xFF1A283B);
+    final isDark = AppThemeColors.isDark(context);
+    final modalBg = AppThemeColors.cardBg(context);
+    final textHeading = AppThemeColors.textPrimary(context);
     final primaryBtnBg = isDark ? const Color(0xFF3B82F6) : const Color(0xFF1A283B);
 
     showModalBottomSheet(
@@ -311,7 +312,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildPropertyRow(String label, String value) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = AppThemeColors.isDark(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -343,7 +344,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   _StatusStyle _getStatusStyle(String status) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = AppThemeColors.isDark(context);
     switch (status) {
       case 'COMPLETED':
         return _StatusStyle(
@@ -392,7 +393,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildDrawer(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = AppThemeColors.isDark(context);
     final drawerBg = isDark ? const Color(0xFF161E28) : const Color(0xFFF8F8F6);
     final headerBg = isDark ? const Color(0xFF111720) : const Color(0xFF1A283B);
     final iconColor = isDark ? const Color(0xFF94A3B8) : const Color(0xFF1A283B);
@@ -550,18 +551,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Divider(color: dividerColor),
               ListTile(
                 leading: Icon(
-                  ThemeController.instance.themeMode == ThemeMode.dark
+                  isDark
                       ? Icons.dark_mode_outlined
-                      : ThemeController.instance.themeMode == ThemeMode.light
-                          ? Icons.light_mode_outlined
-                          : Icons.brightness_auto_outlined,
+                      : Icons.light_mode_outlined,
                   color: iconColor,
                 ),
                 title: const Text('Appearance & Theme', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
                 subtitle: Text(
                   ThemeController.instance.themeMode == ThemeMode.system
-                      ? 'System Default'
-                      : ThemeController.instance.themeMode == ThemeMode.dark
+                      ? 'System Default (${isDark ? "Dark" : "Light"})'
+                      : isDark
                           ? 'Dark Mode'
                           : 'Light Mode',
                   style: const TextStyle(fontSize: 11),
@@ -569,7 +568,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 trailing: const Icon(Icons.swap_horiz, size: 18),
                 onTap: () {
                   setState(() {
-                    ThemeController.instance.toggleTheme();
+                    ThemeController.instance.toggleTheme(context);
                   });
                 },
               ),
@@ -651,17 +650,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             IconButton(
               icon: Icon(
-                ThemeController.instance.themeMode == ThemeMode.dark
+                AppThemeColors.isDark(context)
                     ? Icons.dark_mode_outlined
-                    : ThemeController.instance.themeMode == ThemeMode.light
-                        ? Icons.light_mode_outlined
-                        : Icons.brightness_auto_outlined,
+                    : Icons.light_mode_outlined,
                 size: 20,
               ),
-              tooltip: 'Theme: ${ThemeController.instance.themeMode == ThemeMode.system ? "System" : ThemeController.instance.themeMode == ThemeMode.dark ? "Dark" : "Light"}',
+              tooltip: AppThemeColors.isDark(context)
+                  ? 'Switch to Light Mode'
+                  : 'Switch to Dark Mode',
               onPressed: () {
                 setState(() {
-                  ThemeController.instance.toggleTheme();
+                  ThemeController.instance.toggleTheme(context);
                 });
               },
             ),
@@ -777,7 +776,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 width: 8,
                                 height: 8,
                                 decoration: BoxDecoration(
-                                  color: _health != null ? const Color(0xFF245E43) : const Color(0xFF8A2C2C),
+                                  color: _health != null
+                                      ? (AppThemeColors.isDark(context) ? const Color(0xFF4ADE80) : const Color(0xFF245E43))
+                                      : (AppThemeColors.isDark(context) ? const Color(0xFFF87171) : const Color(0xFF8A2C2C)),
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -811,7 +812,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             Expanded(
                               child: ElevatedButton.icon(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Theme.of(context).brightness == Brightness.dark
+                                  backgroundColor: AppThemeColors.isDark(context)
                                       ? const Color(0xFF3B82F6)
                                       : const Color(0xFF1A283B),
                                   foregroundColor: Colors.white,
@@ -851,6 +852,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               icon: Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
+                                  color: AppThemeColors.cardBg(context),
                                   border: Border.all(color: AppThemeColors.border(context)),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
@@ -943,12 +945,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         // 3. Optional Progressive Disclosure Reference Card
                         Container(
                           decoration: BoxDecoration(
-                            color: AppThemeColors.subCardBg(context),
+                            color: AppThemeColors.cardBg(context),
                             borderRadius: BorderRadius.circular(6),
                             border: Border.all(color: AppThemeColors.border(context)),
                           ),
                           child: Theme(
-                            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                            data: Theme.of(context).copyWith(
+                              dividerColor: Colors.transparent,
+                              iconTheme: IconThemeData(color: AppThemeColors.textMuted(context)),
+                            ),
                             child: ExpansionTile(
                               initiallyExpanded: _showReferenceCard,
                               onExpansionChanged: (expanded) {
@@ -976,7 +981,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: AppThemeColors.cardBg(context),
+                                    color: AppThemeColors.subCardBg(context),
                                     borderRadius: BorderRadius.circular(4),
                                     border: Border.all(color: AppThemeColors.border(context)),
                                   ),
@@ -998,12 +1003,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             style: TextStyle(
                                               fontSize: 10,
                                               fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).brightness == Brightness.dark ? const Color(0xFF68D391) : const Color(0xFF245E43),
+                                              color: AppThemeColors.isDark(context) ? const Color(0xFF68D391) : const Color(0xFF245E43),
                                             ),
                                           ),
                                         ],
                                       ),
-                                      const Divider(height: 12),
+                                      Divider(height: 12, color: AppThemeColors.border(context)),
                                       Row(
                                         children: [
                                           Text('NE: ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: AppThemeColors.textPrimary(context))),
@@ -1019,7 +1024,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                             style: TextStyle(
                                               fontSize: 10,
                                               fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).brightness == Brightness.dark ? const Color(0xFFFEB2B2) : const Color(0xFF8A2C2C),
+                                              color: AppThemeColors.isDark(context) ? const Color(0xFFFEB2B2) : const Color(0xFF8A2C2C),
                                             ),
                                           ),
                                         ],
@@ -1240,7 +1245,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         borderRadius: BorderRadius.circular(2),
                                         child: LinearProgressIndicator(
                                           value: exp.progress,
-                                          backgroundColor: Theme.of(context).brightness == Brightness.dark ? const Color(0xFF2C3848) : const Color(0xFFE9ECEF),
+                                          backgroundColor: AppThemeColors.isDark(context) ? const Color(0xFF263344) : const Color(0xFFE9ECEF),
                                           color: statusStyle.textColor,
                                           minHeight: 4,
                                         ),
@@ -1258,7 +1263,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           }),
 
                         const SizedBox(height: 24),
-                        const Divider(),
+                        Divider(color: AppThemeColors.border(context)),
 
                         // 6. Minimal Legal & Consortium Attribution
                         Padding(
@@ -1284,7 +1289,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     'Governance & Privacy',
                                     style: TextStyle(
                                       fontSize: 11,
-                                      color: Theme.of(context).brightness == Brightness.dark ? const Color(0xFF60A5FA) : const Color(0xFF1A283B),
+                                      color: AppThemeColors.isDark(context) ? const Color(0xFF60A5FA) : const Color(0xFF1A283B),
                                       decoration: TextDecoration.underline,
                                     ),
                                   ),
@@ -1296,7 +1301,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     'Contact',
                                     style: TextStyle(
                                       fontSize: 11,
-                                      color: Theme.of(context).brightness == Brightness.dark ? const Color(0xFF60A5FA) : const Color(0xFF1A283B),
+                                      color: AppThemeColors.isDark(context) ? const Color(0xFF60A5FA) : const Color(0xFF1A283B),
                                       decoration: TextDecoration.underline,
                                     ),
                                   ),
@@ -1311,7 +1316,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
         floatingActionButton: FloatingActionButton.extended(
           elevation: 0,
-          backgroundColor: Theme.of(context).brightness == Brightness.dark ? const Color(0xFF3B82F6) : const Color(0xFF1A283B),
+          backgroundColor: AppThemeColors.isDark(context) ? const Color(0xFF3B82F6) : const Color(0xFF1A283B),
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           onPressed: () {
