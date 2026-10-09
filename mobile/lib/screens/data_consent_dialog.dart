@@ -40,9 +40,11 @@ class _DataConsentDialogState extends State<DataConsentDialog> {
       content: SizedBox(
         width: double.maxFinite,
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Material(
+            color: Colors.transparent,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 padding: const EdgeInsets.all(10),
@@ -124,6 +126,7 @@ class _DataConsentDialogState extends State<DataConsentDialog> {
             ],
           ),
         ),
+      ),
       ),
       actions: [
         TextButton(

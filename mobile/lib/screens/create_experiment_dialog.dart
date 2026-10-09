@@ -244,12 +244,13 @@ class _CreateExperimentDialogState extends State<CreateExperimentDialog> {
         content: Container(
           constraints: const BoxConstraints(maxWidth: 520),
           width: double.maxFinite,
-          // Problem 3: Scrollable with drag dismiss to ensure keyboard never covers inputs
-          child: SingleChildScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+          child: Material(
+            color: Colors.transparent,
+            child: SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextField(
                   controller: _nameController,
@@ -633,6 +634,7 @@ class _CreateExperimentDialogState extends State<CreateExperimentDialog> {
               ],
             ),
           ),
+        ),
         ),
         actions: [
           TextButton(

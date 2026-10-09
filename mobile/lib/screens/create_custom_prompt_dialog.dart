@@ -226,12 +226,13 @@ class _CreateCustomPromptDialogState extends State<CreateCustomPromptDialog> {
         ),
         content: SizedBox(
           width: double.maxFinite,
-          // Problem 3: Keyboard-aware scrolling
-          child: SingleChildScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+          child: Material(
+            color: Colors.transparent,
+            child: SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   padding: const EdgeInsets.all(10),
@@ -516,6 +517,7 @@ class _CreateCustomPromptDialogState extends State<CreateCustomPromptDialog> {
               ],
             ),
           ),
+        ),
         ),
         actions: [
           TextButton(

@@ -407,8 +407,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       backgroundColor: drawerBg,
       child: SafeArea(
         child: FocusScope(
-          child: ListView(
-            padding: EdgeInsets.zero,
+          child: Material(
+            color: Colors.transparent,
+            child: ListView(
+              padding: EdgeInsets.zero,
             children: [
               Container(
                 padding: const EdgeInsets.all(20),
@@ -613,6 +615,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
           ),
         ),
+      ),
       ),
     );
   }
